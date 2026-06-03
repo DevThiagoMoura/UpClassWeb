@@ -1,0 +1,36 @@
+<% const curso = locals.curso || {} %>
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4><%= locals.titulo %></h4>
+            <p class="mb-0">&raquo; <%= curso.titulo %></p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item"><a href="/cursos">Cursos</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Detalhes</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><%= curso.titulo %></h4>
+                <a href="/cursos/<%= curso.id %>/editar" class="btn btn-warning">Editar</a>
+            </div>
+            <div class="card-body">
+                <p><strong>Descrição:</strong> <%= curso.descricao || '-' %></p>
+                <p><strong>Preço:</strong> <%= moneyFormat(curso.preco) %></p>
+                <p><strong>Categoria:</strong> <%= curso?.categoria?.nome || '-' %></p>
+                <p><strong>ID do instrutor:</strong> <%= curso.instrutorId || '-' %></p>
+                <p><strong>Status:</strong> <%= curso.status %></p>
+                <a href="/cursos" class="btn btn-secondary">Voltar</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4><%= titulo %></h4>
+            <p class="mb-0">&raquo; Consulte todas as categorias de cursos</p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Categorias</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Categorias cadastradas</h4>
+                <a href="/categorias/criar" class="btn btn-primary mb-2">Adicionar Nova Categoria</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Ativo</th>
+                                <th>Criado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (!categorias.length) { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">Nenhuma categoria cadastrada.</td>
+                                </tr>
+                            <% } %>
+
+                            <% for( let index = 0; index < categorias.length; index++ ) { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= categorias[index].nome %></td>
+                                    <td><%= categorias[index].descricao || '-' %></td>
+                                    <td>
+                                        <% if (categorias[index].ativo) { %>
+                                            <span class="badge badge-primary">Ativa</span>
+                                        <% } else { %>
+                                            <span class="badge badge-danger">Inativa</span>
+                                        <% } %>
+                                    </td>
+                                    <td><%= dateFormat(categorias[index].criadoEm) %></td>
+                                    <td>
+                                        <a href="/categorias/<%= categorias[index].id %>" class="text-info mr-1">
+                                            <i class="fa fa-eye fa-lg"></i>
+                                        </a>
+                                        <a href="/categorias/<%= categorias[index].id %>/editar" class="text-warning mr-1">
+                                            <i class="fa fa-pencil fa-lg"></i>
+                                        </a>
+                                        <a href="/categorias/<%= categorias[index].id %>/excluir" class="text-danger">
+                                            <i class="fa fa-trash fa-lg"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

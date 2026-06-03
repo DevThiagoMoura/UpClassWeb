@@ -1,0 +1,128 @@
+<% const erros = validationErrors(locals.errors); %>
+<% const curso = locals.curso || {} %>
+<% const categorias = locals.categorias || [] %>
+<% const preco = curso.preco === undefined || curso.preco === null ? '' : String(curso.preco).replace('.', ',') %>
+<% const categoriaSelecionada = curso?.categoria?.id || curso?.categoria || '' %>
+<% const statusSelecionado = curso.status || 'rascunho' %>
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4><%= locals.titulo %></h4>
+            <p class="mb-0">&raquo; <%= locals.subtitulo || 'Preencha os dados do curso' %></p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item"><a href="/cursos">Consulta de Cursos</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Formulário</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <% if (erros.all.length) { %>
+            <div class="alert alert-danger">
+                <h5>Não foi possível salvar</h5>
+                <ul>
+                    <% erros.all.forEach((mensagem) => { %>
+                        <li><%= mensagem %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="/cursos/<%= curso.id ? curso.id + '/editar' : 'criar' %>" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="titulo" class="form-label">Título do Curso</label>
+                        <input type="text" class="form-control <%= erros.has('titulo') ? 'is-invalid' : '' %>"
+                            id="titulo" name="titulo" placeholder="Informe o título do curso" value="<%= curso.titulo || '' %>">
+
+                        <% if (erros.has('titulo')) { %>
+                            <div class="invalid-feedback d-block">
+                                <ul>
+                                    <% erros.get('titulo').forEach((mensagem) => { %>
+                                        <li><%= mensagem %></li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control <%= erros.has('descricao') ? 'is-invalid' : '' %>"
+                            id="descricao" name="descricao" rows="4" placeholder="Informe a descrição do curso"><%= curso.descricao || '' %></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-4 mb-3">
+                            <label for="preco" class="form-label">Preço</label>
+                            <input type="text" class="form-control <%= erros.has('preco') ? 'is-invalid' : '' %>"
+                                id="preco" name="preco" placeholder="0,00" value="<%= preco %>">
+
+                            <% if (erros.has('preco')) { %>
+                                <div class="invalid-feedback d-block">
+                                    <ul>
+                                        <% erros.get('preco').forEach((mensagem) => { %>
+                                            <li><%= mensagem %></li>
+                                        <% }) %>
+                                    </ul>
+                                </div>
+                            <% } %>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select id="status" name="status" class="form-control <%= erros.has('status') ? 'is-invalid' : '' %>">
+                                <option value="rascunho" <%= statusSelecionado === 'rascunho' ? 'selected' : '' %>>Rascunho</option>
+                                <option value="publicado" <%= statusSelecionado === 'publicado' ? 'selected' : '' %>>Publicado</option>
+                                <option value="arquivado" <%= statusSelecionado === 'arquivado' ? 'selected' : '' %>>Arquivado</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4 mb-3">
+                            <label for="instrutorId" class="form-label">ID do Instrutor</label>
+                            <input type="number" class="form-control <%= erros.has('instrutorId') ? 'is-invalid' : '' %>"
+                                id="instrutorId" name="instrutorId" placeholder="Opcional" value="<%= curso.instrutorId || '' %>">
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="categoria" class="form-label">Categoria</label>
+                        <select id="categoria" name="categoria" class="form-control <%= erros.has('categoria') ? 'is-invalid' : '' %>">
+                            <option value="">Selecione uma categoria</option>
+                            <% if (!categorias.length && categoriaSelecionada) { %>
+                                <option value="<%= categoriaSelecionada %>" selected>Categoria selecionada (#<%= categoriaSelecionada %>)</option>
+                            <% } %>
+                            <% categorias.forEach(categoria => { %>
+                                <option value="<%= categoria.id %>" <%= String(categoria.id) === String(categoriaSelecionada) ? 'selected' : '' %>>
+                                    <%= categoria.nome %>
+                                </option>
+                            <% }) %>
+                        </select>
+
+                        <% if (erros.has('categoria')) { %>
+                            <div class="invalid-feedback d-block">
+                                <ul>
+                                    <% erros.get('categoria').forEach((mensagem) => { %>
+                                        <li><%= mensagem %></li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary mr-2">Salvar Curso</button>
+                        <a href="/cursos" class="btn btn-warning">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

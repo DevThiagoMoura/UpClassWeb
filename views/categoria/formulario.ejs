@@ -1,0 +1,76 @@
+<% const erros = validationErrors(locals.errors); %>
+<% const categoria = locals.categoria || {} %>
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4><%= locals.titulo %></h4>
+            <p class="mb-0">&raquo; <%= locals.subtitulo || 'Preencha os dados da categoria' %></p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item"><a href="/categorias">Consulta de Categorias</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Formulário</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <% if (erros.all.length) { %>
+            <div class="alert alert-danger">
+                <h5>Não foi possível salvar</h5>
+                <ul>
+                    <% erros.all.forEach((mensagem) => { %>
+                        <li><%= mensagem %></li>
+                    <% }) %>
+                </ul>
+            </div>
+        <% } %>
+
+        <div class="card">
+            <div class="card-body">
+                <form action="/categorias/<%= categoria.id ? categoria.id + '/editar' : 'criar' %>" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="nome" class="form-label">Nome da Categoria</label>
+                        <input type="text" class="form-control <%= erros.has('nome') ? 'is-invalid' : '' %>"
+                            id="nome" name="nome" placeholder="Informe o nome da categoria" value="<%= categoria.nome || '' %>">
+
+                        <% if (erros.has('nome')) { %>
+                            <div class="invalid-feedback d-block">
+                                <ul>
+                                    <% erros.get('nome').forEach((mensagem) => { %>
+                                        <li><%= mensagem %></li>
+                                    <% }) %>
+                                </ul>
+                            </div>
+                        <% } %>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="descricao" class="form-label">Descrição</label>
+                        <textarea class="form-control <%= erros.has('descricao') ? 'is-invalid' : '' %>"
+                            id="descricao" name="descricao" rows="4" placeholder="Informe a descrição da categoria"><%= categoria.descricao || '' %></textarea>
+                    </div>
+
+                    <% if (categoria.id) { %>
+                        <div class="form-group mb-3">
+                            <label for="ativo" class="form-label">Categoria Ativa?</label>
+                            <select id="ativo" name="ativo" class="form-control">
+                                <option value="true" <%= categoria.ativo ? 'selected' : '' %>>Ativa</option>
+                                <option value="false" <%= !categoria.ativo ? 'selected' : '' %>>Inativa</option>
+                            </select>
+                        </div>
+                    <% } %>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary mr-2">Salvar Categoria</button>
+                        <a href="/categorias" class="btn btn-warning">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
