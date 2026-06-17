@@ -1,0 +1,56 @@
+<% const usuario = locals.usuario || {} %>
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4><%= titulo %></h4>
+            <p class="mb-0">&raquo; <%= locals.subtitulo || 'Confirme a exclusão do usuário' %></p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item"><a href="/usuarios">Usuários</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Excluir</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h4 class="card-title text-white mb-0">Exclusão de usuário</h4>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">Tem certeza que deseja excluir o usuário abaixo?</p>
+
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Nome</th>
+                            <td><%= usuario.nome %></td>
+                        </tr>
+                        <tr>
+                            <th>E-mail</th>
+                            <td><%= usuario.email %></td>
+                        </tr>
+                        <tr>
+                            <th>CPF</th>
+                            <td><%= formatCpf(usuario.cpf) %></td>
+                        </tr>
+                        <tr>
+                            <th>Perfil</th>
+                            <td><%= perfilLabel(usuario.perfil) %></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <form action="/usuarios/<%= usuario.id %>/excluir" method="post">
+                    <button type="submit" class="btn btn-danger">Excluir</button>
+                    <a href="/usuarios" class="btn btn-secondary">Cancelar</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,6 +6,7 @@ import { BadRequestException, Logger, ValidationPipe } from '@nestjs/common';
 import expressEjsLayouts from 'express-ejs-layouts';
 import { registerHelpers } from './helpers';
 import { buildValidationErrorPayload } from 'nest-validation-view';
+import { autenticacaoMiddleware } from './modules/autenticacao/autenticacao.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -20,6 +21,7 @@ async function bootstrap() {
   );
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.use(autenticacaoMiddleware);
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   app.setViewEngine('ejs');
 

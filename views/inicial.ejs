@@ -1,24 +1,22 @@
-<div class="row page-titles mx-0">
-    <div class="col-sm-8 p-md-0">
-        <div class="welcome-text">
-            <h4><%= titulo %></h4>
-            <p class="mb-0">&raquo; Painel administrativo inicial da plataforma de cursos</p>
-        </div>
-    </div>
-    <div class="col-sm-4 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item active"><a href="javascript:void(0)">Inicial</a></li>
-        </ol>
-    </div>
-</div>
+<% const resumo = locals.resumo || {} %>
+<% const totalCategorias = resumo.totalCategorias || 0 %>
+<% const categoriasAtivas = resumo.categoriasAtivas || 0 %>
+<% const totalCursos = resumo.totalCursos || 0 %>
+<% const cursosPublicados = resumo.cursosPublicados || 0 %>
+<% const cursosRascunho = resumo.cursosRascunho || 0 %>
+<% const totalUsuarios = resumo.totalUsuarios || 0 %>
+<% const usuariosAtivos = resumo.usuariosAtivos || 0 %>
+<% const usuariosAdministradores = resumo.usuariosAdministradores || 0 %>
+
+
 
 <div class="row">
     <div class="col-lg-3 col-sm-6">
         <div class="card">
             <div class="stat-widget-two card-body">
                 <div class="stat-content">
-                    <div class="stat-text">Categorias</div>
-                    <div class="stat-digit"><i class="fa fa-list"></i> CRUD</div>
+                    <div class="stat-text">Categorias cadastradas</div>
+                    <div class="stat-digit"><i class="fa fa-list"></i> <%= totalCategorias %></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-primary w-100" role="progressbar"></div>
@@ -30,8 +28,8 @@
         <div class="card">
             <div class="stat-widget-two card-body">
                 <div class="stat-content">
-                    <div class="stat-text">Cursos</div>
-                    <div class="stat-digit"><i class="fa fa-book"></i> CRUD</div>
+                    <div class="stat-text">Categorias ativas</div>
+                    <div class="stat-digit"><i class="fa fa-check-circle"></i> <%= categoriasAtivas %></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-success w-100" role="progressbar"></div>
@@ -43,8 +41,8 @@
         <div class="card">
             <div class="stat-widget-two card-body">
                 <div class="stat-content">
-                    <div class="stat-text">Renderização</div>
-                    <div class="stat-digit"><i class="fa fa-desktop"></i> EJS</div>
+                    <div class="stat-text">Cursos cadastrados</div>
+                    <div class="stat-digit"><i class="fa fa-book"></i> <%= totalCursos %></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-warning w-100" role="progressbar"></div>
@@ -56,8 +54,8 @@
         <div class="card">
             <div class="stat-widget-two card-body">
                 <div class="stat-content">
-                    <div class="stat-text">Banco</div>
-                    <div class="stat-digit"><i class="fa fa-database"></i> MySQL</div>
+                    <div class="stat-text">Cursos publicados</div>
+                    <div class="stat-digit"><i class="fa fa-bullhorn"></i> <%= cursosPublicados %></div>
                 </div>
                 <div class="progress">
                     <div class="progress-bar progress-bar-danger w-100" role="progressbar"></div>
@@ -68,38 +66,66 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-8">
+    <div class="col-lg-4 col-sm-6">
         <div class="card">
-            <div class="card-header">
-                <h4 class="card-title">Base inicial do UpClass Web</h4>
-            </div>
-            <div class="card-body">
-                <p>
-                    O UpClass Web centraliza o cadastro, organização e acompanhamento de cursos,
-                    categorias, módulos, aulas, matrículas, pagamentos, avaliações e tags.
-                </p>
-                <p>
-                    Nesta primeira etapa, o sistema já possui a estrutura NestJS com EJS,
-                    TypeORM, MySQL, layout principal e os módulos administrativos de categorias e cursos.
-                </p>
-                <a href="/categorias" class="btn btn-primary mr-2">Gerenciar Categorias</a>
-                <a href="/cursos" class="btn btn-success">Gerenciar Cursos</a>
+            <div class="stat-widget-two card-body">
+                <div class="stat-content">
+                    <div class="stat-text">Usuários cadastrados</div>
+                    <div class="stat-digit"><i class="fa fa-users"></i> <%= totalUsuarios %></div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-primary w-100" role="progressbar"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 col-sm-6">
+        <div class="card">
+            <div class="stat-widget-two card-body">
+                <div class="stat-content">
+                    <div class="stat-text">Usuários ativos</div>
+                    <div class="stat-digit"><i class="fa fa-user"></i> <%= usuariosAtivos %></div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success w-100" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4 col-sm-6">
+        <div class="card">
+            <div class="stat-widget-two card-body">
+                <div class="stat-content">
+                    <div class="stat-text">Administradores</div>
+                    <div class="stat-digit"><i class="fa fa-user-secret"></i> <%= usuariosAdministradores %></div>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-warning w-100" role="progressbar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title">Próximos módulos</h4>
+                <h4 class="card-title">Base do sistema</h4>
             </div>
             <div class="card-body">
-                <ul class="list-group">
-                    <li class="list-group-item">Usuários e autenticação</li>
-                    <li class="list-group-item">Módulos e aulas</li>
-                    <li class="list-group-item">Matrículas</li>
-                    <li class="list-group-item">Pagamentos</li>
-                    <li class="list-group-item">Avaliações e tags</li>
-                </ul>
+                <p>
+                    A base atual do projeto já cobre cadastro, listagem, edição e remoção de
+                    categorias, cursos e usuários, além de login com token assinado em cookie.
+                </p>
+                <p>
+                    No momento, o painel também mostra usuários ativos e administradores. Nos cursos,
+                    há <strong><%= cursosPublicados %></strong> publicados e <strong><%= cursosRascunho %></strong>
+                    em rascunho.
+                </p>
+                <a href="/categorias" class="btn btn-primary mr-2">Ir para Categorias</a>
+                <a href="/cursos" class="btn btn-success mr-2">Ir para Cursos</a>
+                <a href="/usuarios" class="btn btn-warning">Ir para Usuários</a>
             </div>
         </div>
     </div>

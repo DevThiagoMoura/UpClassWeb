@@ -7,5 +7,6 @@ import { CursoService } from './curso.service';
   imports: [CategoriaModule],
   controllers: [CursoController],
   providers: [CursoService],
+  exports: [CursoService],
 })
 export class CursoModule {}

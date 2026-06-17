@@ -1,0 +1,49 @@
+<% const usuario = locals.usuario || {} %>
+
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4><%= titulo %></h4>
+            <p class="mb-0">&raquo; <%= usuario.nome %></p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item"><a href="/usuarios">Usuários</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Detalhes</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"><%= usuario.nome %></h4>
+                <a href="/usuarios/<%= usuario.id %>/editar" class="btn btn-warning">Editar</a>
+            </div>
+            <div class="card-body">
+                <p><strong>E-mail:</strong> <%= usuario.email %></p>
+                <p><strong>CPF:</strong> <%= formatCpf(usuario.cpf) %></p>
+                <p>
+                    <strong>Perfil:</strong>
+                    <span class="badge <%= perfilBadgeClass(usuario.perfil) %>">
+                        <%= perfilLabel(usuario.perfil) %>
+                    </span>
+                </p>
+                <p>
+                    <strong>Status:</strong>
+                    <% if (usuario.ativo) { %>
+                        Ativo
+                    <% } else { %>
+                        Inativo
+                    <% } %>
+                </p>
+                <p><strong>Criado em:</strong> <%= dateFormat(usuario.criadoEm) %></p>
+                <p><strong>Atualizado em:</strong> <%= dateFormat(usuario.atualizadoEm) || '-' %></p>
+                <a href="/usuarios" class="btn btn-secondary">Voltar</a>
+            </div>
+        </div>
+    </div>
+</div>

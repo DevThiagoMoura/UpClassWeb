@@ -1,3 +1,4 @@
+<% const authUser = locals.authUser || null %>
 <div class="header">
     <div class="header-content">
         <nav class="navbar navbar-expand">
@@ -27,7 +28,7 @@
                                     <span class="success"><i class="ti-book"></i></span>
                                     <div class="media-body">
                                         <a href="/cursos">
-                                            <p><strong>UpClass</strong> pronto para gerenciar cursos e categorias.</p>
+                                            <p><strong>UpClass</strong> pronta para gerenciar categorias, cursos e usuários.</p>
                                         </a>
                                     </div>
                                     <span class="notify-time">agora</span>
@@ -50,14 +51,31 @@
                             <i class="mdi mdi-account"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a href="/sobre" class="dropdown-item">
-                                <i class="icon-user"></i>
-                                <span class="ml-2">Projeto</span>
-                            </a>
-                            <a href="/login" class="dropdown-item">
-                                <i class="icon-key"></i>
-                                <span class="ml-2">Login</span>
-                            </a>
+                            <% if (authUser) { %>
+                                <div class="dropdown-item-text px-3 py-2">
+                                    <strong><%= authUser.nome %></strong>
+                                    <small class="d-block text-muted"><%= authUser.email %></small>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <form action="/logout" method="post" class="px-3 py-2">
+                                    <button type="submit" class="btn btn-link p-0 text-danger">
+                                        <i class="fa fa-sign-out mr-1"></i> Sair
+                                    </button>
+                                </form>
+                            <% } else { %>
+                                <a href="/sobre" class="dropdown-item">
+                                    <i class="icon-user"></i>
+                                    <span class="ml-2">Projeto</span>
+                                </a>
+                                <a href="/login" class="dropdown-item">
+                                    <i class="icon-key"></i>
+                                    <span class="ml-2">Entrar</span>
+                                </a>
+                                <a href="/cadastro" class="dropdown-item">
+                                    <i class="icon-user-follow"></i>
+                                    <span class="ml-2">Cadastrar</span>
+                                </a>
+                            <% } %>
                         </div>
                     </li>
                 </ul>

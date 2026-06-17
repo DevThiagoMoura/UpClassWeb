@@ -1,0 +1,81 @@
+<div class="row page-titles mx-0">
+    <div class="col-sm-8 p-md-0">
+        <div class="welcome-text">
+            <h4><%= titulo %></h4>
+            <p class="mb-0">&raquo; Consulte os usuários cadastrados</p>
+        </div>
+    </div>
+    <div class="col-sm-4 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Usuários</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Usuários cadastrados</h4>
+                <a href="/usuarios/criar" class="btn btn-primary mb-2">Adicionar Novo Usuário</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-responsive-sm">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Perfil</th>
+                                <th>Status</th>
+                                <th>Criado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (!usuarios.length) { %>
+                                <tr>
+                                    <td colspan="7" class="text-center">Nenhum usuário cadastrado.</td>
+                                </tr>
+                            <% } %>
+
+                            <% for (let index = 0; index < usuarios.length; index++) { %>
+                                <tr>
+                                    <td><%= index + 1 %></td>
+                                    <td><%= usuarios[index].nome %></td>
+                                    <td><%= usuarios[index].email %></td>
+                                    <td>
+                                        <span class="badge <%= perfilBadgeClass(usuarios[index].perfil) %>">
+                                            <%= perfilLabel(usuarios[index].perfil) %>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <% if (usuarios[index].ativo) { %>
+                                            <span class="badge badge-primary">Ativo</span>
+                                        <% } else { %>
+                                            <span class="badge badge-danger">Inativo</span>
+                                        <% } %>
+                                    </td>
+                                    <td><%= dateFormat(usuarios[index].criadoEm) %></td>
+                                    <td>
+                                        <a href="/usuarios/<%= usuarios[index].id %>" class="text-info mr-1">
+                                            <i class="fa fa-eye fa-lg"></i>
+                                        </a>
+                                        <a href="/usuarios/<%= usuarios[index].id %>/editar" class="text-warning mr-1">
+                                            <i class="fa fa-pencil fa-lg"></i>
+                                        </a>
+                                        <a href="/usuarios/<%= usuarios[index].id %>/excluir" class="text-danger">
+                                            <i class="fa fa-trash fa-lg"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,9 +1,13 @@
+<% const erros = validationErrors(locals.errors); %>
+<% const login = locals.login || {} %>
+<% const mensagemContexto = locals.mensagemContexto || '' %>
+<% const erroAutenticacao = locals.erroAutenticacao || '' %>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - UpClass Web</title>
+    <title><%= titulo || 'Login - UpClass' %></title>
     <link href="/css/style.css" rel="stylesheet">
     <style>
         body {
@@ -12,32 +16,84 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            padding: 24px;
         }
 
         .login-card {
             background: #fff;
             border-radius: 6px;
             box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+            max-width: 420px;
             padding: 32px;
-            width: 380px;
+            width: 100%;
         }
     </style>
 </head>
 <body>
     <div class="login-card">
-        <h1 class="mb-4">UpClass Web</h1>
-        <form>
+        <h1 class="mb-2">UpClass</h1>
+        <p class="text-muted mb-4">Acesso ao sistema administrativo.</p>
+
+        <% if (mensagemContexto) { %>
+            <div class="alert alert-info"><%= mensagemContexto %></div>
+        <% } %>
+
+        <% if (erroAutenticacao) { %>
+            <div class="alert alert-danger"><%= erroAutenticacao %></div>
+        <% } %>
+
+        <% if (erros.all.length) { %>
+            <div class="alert alert-danger">
+                <% erros.all.forEach((mensagem) => { %>
+                    <div><%= mensagem %></div>
+                <% }) %>
+            </div>
+        <% } %>
+
+        <form action="/login" method="post" novalidate>
+            <input type="hidden" name="next" value="<%= login.next || '' %>">
+
             <div class="form-group">
-                <label for="username">Usuário</label>
-                <input class="form-control" type="text" name="username" id="username">
+                <label for="email">E-mail</label>
+                <input
+                    class="form-control <%= erros.has('email') ? 'is-invalid' : '' %>"
+                    type="email"
+                    name="email"
+                    id="email"
+                    autocomplete="email"
+                    value="<%= login.email || '' %>"
+                    placeholder="admin@upclass.com"
+                >
+                <% if (erros.has('email')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('email').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
             </div>
 
             <div class="form-group">
-                <label for="password">Senha</label>
-                <input class="form-control" type="password" name="password" id="password">
+                <label for="senha">Senha</label>
+                <input
+                    class="form-control <%= erros.has('senha') ? 'is-invalid' : '' %>"
+                    type="password"
+                    name="senha"
+                    id="senha"
+                    autocomplete="current-password"
+                    placeholder="Sua senha"
+                >
+                <% if (erros.has('senha')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('senha').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
             </div>
 
-            <button class="btn btn-primary btn-block" type="submit">Acessar</button>
+            <button class="btn btn-primary btn-block" type="submit">Entrar</button>
+            <a href="/cadastro" class="btn btn-outline-secondary btn-block mt-2">Cadastrar</a>
         </form>
     </div>
 </body>

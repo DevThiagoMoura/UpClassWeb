@@ -1,0 +1,191 @@
+<% const erros = validationErrors(locals.errors); %>
+<% const cadastro = locals.cadastro || {} %>
+<% const mensagemContexto = locals.mensagemContexto || '' %>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= titulo || 'Cadastro - UpClass' %></title>
+    <link href="/css/style.css" rel="stylesheet">
+    <style>
+        body {
+            align-items: center;
+            background: #f4f7fb;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .auth-card {
+            background: #fff;
+            border-radius: 6px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+            max-width: 520px;
+            padding: 32px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <h1 class="mb-2">UpClass</h1>
+        <p class="text-muted mb-4">Crie sua conta para acessar o sistema.</p>
+
+        <% if (mensagemContexto) { %>
+            <div class="alert alert-info"><%= mensagemContexto %></div>
+        <% } %>
+
+        <% if (erros.all.length) { %>
+            <div class="alert alert-danger">
+                <% erros.all.forEach((mensagem) => { %>
+                    <div><%= mensagem %></div>
+                <% }) %>
+            </div>
+        <% } %>
+
+        <form action="/cadastro" method="post" novalidate>
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input
+                    class="form-control <%= erros.has('nome') ? 'is-invalid' : '' %>"
+                    type="text"
+                    name="nome"
+                    id="nome"
+                    autocomplete="name"
+                    value="<%= cadastro.nome || '' %>"
+                    placeholder="Seu nome"
+                >
+                <% if (erros.has('nome')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('nome').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input
+                    class="form-control <%= erros.has('email') ? 'is-invalid' : '' %>"
+                    type="email"
+                    name="email"
+                    id="email"
+                    autocomplete="email"
+                    value="<%= cadastro.email || '' %>"
+                    placeholder="seuemail@exemplo.com"
+                >
+                <% if (erros.has('email')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('email').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="form-group">
+                <label for="cpf">CPF</label>
+                <input
+                    class="form-control <%= erros.has('cpf') ? 'is-invalid' : '' %>"
+                    type="text"
+                    name="cpf"
+                    id="cpf"
+                    autocomplete="off"
+                    inputmode="numeric"
+                    maxlength="14"
+                    value="<%= cadastro.cpf || '' %>"
+                    placeholder="000.000.000-00"
+                >
+                <% if (erros.has('cpf')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('cpf').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input
+                    class="form-control <%= erros.has('senha') ? 'is-invalid' : '' %>"
+                    type="password"
+                    name="senha"
+                    id="senha"
+                    autocomplete="new-password"
+                    placeholder="Crie uma senha"
+                >
+                <% if (erros.has('senha')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('senha').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmacaoSenha">Confirmação de senha</label>
+                <input
+                    class="form-control <%= erros.has('confirmacaoSenha') ? 'is-invalid' : '' %>"
+                    type="password"
+                    name="confirmacaoSenha"
+                    id="confirmacaoSenha"
+                    autocomplete="new-password"
+                    placeholder="Repita a senha"
+                >
+                <% if (erros.has('confirmacaoSenha')) { %>
+                    <div class="invalid-feedback d-block">
+                        <% erros.get('confirmacaoSenha').forEach((mensagem) => { %>
+                            <div><%= mensagem %></div>
+                        <% }) %>
+                    </div>
+                <% } %>
+            </div>
+
+            <button class="btn btn-primary btn-block" type="submit">Cadastrar</button>
+            <a href="/login" class="btn btn-outline-secondary btn-block mt-2">Voltar para login</a>
+        </form>
+    </div>
+
+    <script>
+        (() => {
+            const cpf = document.getElementById('cpf');
+
+            if (!cpf) {
+                return;
+            }
+
+            const formatCpf = (value) => {
+                const digits = String(value || '').replace(/\D/g, '').slice(0, 11);
+                const parts = [];
+
+                if (digits.length > 0) parts.push(digits.slice(0, 3));
+                if (digits.length >= 4) parts.push(digits.slice(3, 6));
+                if (digits.length >= 7) parts.push(digits.slice(6, 9));
+
+                let formatted = parts.join('.');
+
+                if (digits.length >= 10) {
+                    formatted += `-${digits.slice(9, 11)}`;
+                } else if (digits.length > 9) {
+                    formatted += `-${digits.slice(9)}`;
+                }
+
+                return formatted;
+            };
+
+            const applyMask = () => {
+                cpf.value = formatCpf(cpf.value);
+            };
+
+            cpf.addEventListener('input', applyMask);
+            applyMask();
+        })();
+    </script>
+</body>
+</html>
