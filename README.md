@@ -1,6 +1,6 @@
-# Base Administrativa
+# UpClass
 
-Aplicação web renderizada no servidor para gerenciamento de uma plataforma de cursos.
+Aplicação web para gerenciamento de uma plataforma de cursos.
 
 ## Estado atual
 
