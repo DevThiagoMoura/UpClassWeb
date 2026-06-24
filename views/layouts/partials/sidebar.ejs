@@ -1,3 +1,7 @@
+<% const canManageCategorias = Boolean(locals.canManageCategorias) %>
+<% const canManageCursos = Boolean(locals.canManageCursos) %>
+<% const canManageUsuarios = Boolean(locals.canManageUsuarios) %>
+
 <div class="quixnav">
     <div class="quixnav-scroll">
         <ul class="metismenu" id="menu">
@@ -10,26 +14,32 @@
                 </a>
             </li>
 
-            <li>
-                <a href="/categorias" aria-expanded="false">
-                    <i class="icon icon-tag"></i>
-                    <span class="nav-text">Categorias</span>
-                </a>
-            </li>
+            <% if (canManageCategorias) { %>
+                <li>
+                    <a href="/categorias" aria-expanded="false">
+                        <i class="icon icon-tag"></i>
+                        <span class="nav-text">Categorias</span>
+                    </a>
+                </li>
+            <% } %>
 
-            <li>
-                <a href="/cursos" aria-expanded="false">
-                    <i class="icon icon-book-open-2"></i>
-                    <span class="nav-text">Cursos</span>
-                </a>
-            </li>
+            <% if (canManageCursos) { %>
+                <li>
+                    <a href="/cursos" aria-expanded="false">
+                        <i class="icon icon-book-open-2"></i>
+                        <span class="nav-text">Cursos</span>
+                    </a>
+                </li>
+            <% } %>
 
-            <li>
-                <a href="/usuarios" aria-expanded="false">
-                    <i class="icon icon-users-mm"></i>
-                    <span class="nav-text">Usuários</span>
-                </a>
-            </li>
+            <% if (canManageUsuarios) { %>
+                <li>
+                    <a href="/usuarios" aria-expanded="false">
+                        <i class="icon icon-users-mm"></i>
+                        <span class="nav-text">Usuarios</span>
+                    </a>
+                </li>
+            <% } %>
 
             <li>
                 <a href="/sobre" aria-expanded="false">

@@ -3,12 +3,15 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpStatus,
   NotFoundException,
   Param,
   Post,
   Redirect,
   Render,
+  Res,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { ValidationView } from 'nest-validation-view';
 import { CategoriaService } from './categoria.service';
 import { CreateCategoriaDto } from './dtos/create-categoria.dto';
@@ -109,13 +112,39 @@ export class CategoriaController {
       titulo: 'Exclusão de Categoria',
       subtitulo: `Exclusão da categoria: ${categoria.nome}`,
       categoria,
+      mensagemBloqueio:
+        this.categoriaService.getMensagemBloqueioRemocao(categoria),
     };
   }
 
   @Post(':id/excluir')
-  @Redirect('/categorias')
-  async formExcluirSalvar(@Param('id') id: number): Promise<void> {
+  async formExcluirSalvar(
+    @Param('id') id: number,
+    @Res() response: Response,
+  ): Promise<void> {
+    const categoria = await this.categoriaService.findOne(id);
+
+    if (!categoria) {
+      throw new NotFoundException('Categoria nao encontrada!');
+    }
+
+    const mensagemBloqueio =
+      this.categoriaService.getMensagemBloqueioRemocao(categoria);
+
+    if (mensagemBloqueio) {
+      response.status(HttpStatus.CONFLICT).render('categoria/remover', {
+        titulo: 'Exclusao de Categoria',
+        subtitulo: `Exclusao da categoria: ${categoria.nome}`,
+        categoria,
+        mensagemBloqueio,
+      });
+
+      return;
+    }
+
     await this.categoriaService.remove(id);
+
+    response.redirect(HttpStatus.SEE_OTHER, '/categorias');
   }
 
   @Post(':id/remover')

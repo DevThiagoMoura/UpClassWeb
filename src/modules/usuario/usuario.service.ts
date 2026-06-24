@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { CreateUsuarioDto } from './dtos/create-usuario.dto';
 import { UpdateUsuarioDto } from './dtos/update-usuario.dto';
@@ -29,6 +29,12 @@ export class UsuarioService {
   async findByEmail(email: string): Promise<Usuario | null> {
     return Usuario.findOne({
       where: { email: email.trim().toLowerCase() },
+    });
+  }
+
+  async findByCpf(cpf: string): Promise<Usuario | null> {
+    return Usuario.findOne({
+      where: { cpf },
     });
   }
 
@@ -78,6 +84,8 @@ export class UsuarioService {
   }
 
   async create(dados: CreateUsuarioDto): Promise<Usuario> {
+    await this.validarDadosUnicos(dados.email, dados.cpf);
+
     const usuario = new Usuario();
     const credenciais = this.criarCredenciais(dados.senha);
 
@@ -101,6 +109,8 @@ export class UsuarioService {
       return null;
     }
 
+    await this.validarDadosUnicos(dados.email, dados.cpf, id);
+
     usuario.nome = dados.nome;
     usuario.email = dados.email.trim().toLowerCase();
     usuario.cpf = dados.cpf || null;
@@ -114,6 +124,37 @@ export class UsuarioService {
     }
 
     return usuario.save();
+  }
+
+  private async validarDadosUnicos(
+    email: string,
+    cpf?: string,
+    usuarioIdAtual?: number,
+  ): Promise<void> {
+    const fieldErrors: Record<string, string[]> = {};
+    const emailNormalizado = email.trim().toLowerCase();
+    const usuarioComEmail = await this.findByEmail(emailNormalizado);
+
+    if (usuarioComEmail && usuarioComEmail.id !== usuarioIdAtual) {
+      fieldErrors.email = ['Ja existe um usuario cadastrado com este e-mail'];
+    }
+
+    if (cpf) {
+      const usuarioComCpf = await this.findByCpf(cpf);
+
+      if (usuarioComCpf && usuarioComCpf.id !== usuarioIdAtual) {
+        fieldErrors.cpf = ['Ja existe um usuario cadastrado com este CPF'];
+      }
+    }
+
+    const mensagens = Object.values(fieldErrors).flat();
+
+    if (mensagens.length) {
+      throw new BadRequestException({
+        message: mensagens,
+        fieldErrors,
+      });
+    }
   }
 
   async remove(id: number): Promise<Usuario | null> {

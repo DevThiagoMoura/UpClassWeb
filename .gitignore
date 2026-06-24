@@ -21,6 +21,7 @@ lerna-debug.log*
 
 # IDEs and editors
 /.idea
+/.vs
 .project
 .classpath
 .c9/
@@ -51,5 +52,4 @@ pids
 *.pid
 *.seed
 *.pid.lock
-
 

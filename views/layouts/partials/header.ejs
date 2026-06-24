@@ -1,51 +1,71 @@
 <% const authUser = locals.authUser || null %>
+<% const canManageCategorias = Boolean(locals.canManageCategorias) %>
+<% const canManageCursos = Boolean(locals.canManageCursos) %>
+<% const canManageUsuarios = Boolean(locals.canManageUsuarios) %>
+
 <div class="header">
     <div class="header-content">
         <nav class="navbar navbar-expand">
             <div class="collapse navbar-collapse justify-content-between">
                 <div class="header-left">
-                    <div class="search_bar dropdown">
-                        <span class="search_icon p-3 c-pointer" data-toggle="dropdown">
-                            <i class="mdi mdi-magnify"></i>
-                        </span>
-                        <div class="dropdown-menu p-0 m-0">
-                            <form>
-                                <input class="form-control" type="search" placeholder="Buscar cursos" aria-label="Buscar cursos">
-                            </form>
+                    <% if (canManageCursos) { %>
+                        <div class="search_bar dropdown">
+                            <span class="search_icon p-3 c-pointer" data-toggle="dropdown">
+                                <i class="mdi mdi-magnify"></i>
+                            </span>
+                            <div class="dropdown-menu p-0 m-0">
+                                <form action="/cursos" method="get">
+                                    <input
+                                        class="form-control"
+                                        type="search"
+                                        name="q"
+                                        value="<%= locals.buscaCursos || '' %>"
+                                        placeholder="Buscar cursos"
+                                        aria-label="Buscar cursos"
+                                    >
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                    <% } %>
                 </div>
 
                 <ul class="navbar-nav header-right">
-                    <li class="nav-item dropdown notification_dropdown">
-                        <a class="nav-link" href="#" role="button" data-toggle="dropdown">
-                            <i class="mdi mdi-bell"></i>
-                            <div class="pulse-css"></div>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <ul class="list-unstyled">
-                                <li class="media dropdown-item">
-                                    <span class="success"><i class="ti-book"></i></span>
-                                    <div class="media-body">
-                                        <a href="/cursos">
-                                            <p><strong>UpClass</strong> pronta para gerenciar categorias, cursos e usuários.</p>
-                                        </a>
-                                    </div>
-                                    <span class="notify-time">agora</span>
-                                </li>
-                                <li class="media dropdown-item">
-                                    <span class="primary"><i class="ti-list"></i></span>
-                                    <div class="media-body">
-                                        <a href="/categorias">
-                                            <p>Cadastre categorias antes de criar os cursos.</p>
-                                        </a>
-                                    </div>
-                                    <span class="notify-time">dica</span>
-                                </li>
-                            </ul>
-                            <a class="all-notification" href="/">Ver painel <i class="ti-arrow-right"></i></a>
-                        </div>
-                    </li>
+                    <% if (canManageCursos || canManageCategorias || canManageUsuarios) { %>
+                        <li class="nav-item dropdown notification_dropdown">
+                            <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                                <i class="mdi mdi-bell"></i>
+                                <div class="pulse-css"></div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <ul class="list-unstyled">
+                                    <% if (canManageCursos) { %>
+                                        <li class="media dropdown-item">
+                                            <span class="success"><i class="ti-book"></i></span>
+                                            <div class="media-body">
+                                                <a href="/cursos">
+                                                    <p><strong>UpClass</strong> pronta para gerenciar cursos.</p>
+                                                </a>
+                                            </div>
+                                            <span class="notify-time">agora</span>
+                                        </li>
+                                    <% } %>
+                                    <% if (canManageCategorias) { %>
+                                        <li class="media dropdown-item">
+                                            <span class="primary"><i class="ti-list"></i></span>
+                                            <div class="media-body">
+                                                <a href="/categorias">
+                                                    <p>Cadastre categorias antes de criar os cursos.</p>
+                                                </a>
+                                            </div>
+                                            <span class="notify-time">dica</span>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                                <a class="all-notification" href="/">Ver painel <i class="ti-arrow-right"></i></a>
+                            </div>
+                        </li>
+                    <% } %>
+
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                             <i class="mdi mdi-account"></i>
@@ -55,6 +75,7 @@
                                 <div class="dropdown-item-text px-3 py-2">
                                     <strong><%= authUser.nome %></strong>
                                     <small class="d-block text-muted"><%= authUser.email %></small>
+                                    <small class="d-block text-muted">Perfil: <%= locals.authPerfil || authUser.perfil %></small>
                                 </div>
                                 <div class="dropdown-divider"></div>
                                 <form action="/logout" method="post" class="px-3 py-2">

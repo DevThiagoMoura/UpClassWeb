@@ -6,6 +6,7 @@ import {
   NotFoundException,
   Param,
   Post,
+  Query,
   Redirect,
   Render,
 } from '@nestjs/common';
@@ -24,12 +25,14 @@ export class CursoController {
 
   @Get()
   @Render('curso/inicial')
-  async inicial(): Promise<object> {
-    const cursos = await this.cursoService.findAll();
+  async inicial(@Query('q') q?: string): Promise<object> {
+    const buscaCursos = q?.trim() ?? '';
+    const cursos = await this.cursoService.findAll(buscaCursos);
 
     return {
       titulo: 'Consulta de Cursos',
       cursos,
+      buscaCursos,
     };
   }
 

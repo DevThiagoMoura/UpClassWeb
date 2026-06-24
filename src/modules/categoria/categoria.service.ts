@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { Categoria } from './categoria.entity';
 import { CreateCategoriaDto } from './dtos/create-categoria.dto';
 import { UpdateCategoriaDto } from './dtos/update-categoria.dto';
@@ -43,11 +43,29 @@ export class CategoriaService {
     return categoria.save();
   }
 
+  getMensagemBloqueioRemocao(categoria: Categoria): string | null {
+    const totalCursos = categoria.cursos?.length ?? 0;
+
+    if (!totalCursos) {
+      return null;
+    }
+
+    const termo = totalCursos === 1 ? 'curso vinculado' : 'cursos vinculados';
+
+    return `Nao e possivel excluir esta categoria porque ela possui ${totalCursos} ${termo}. Remova ou altere os cursos antes de excluir a categoria.`;
+  }
+
   async remove(id: number): Promise<Categoria | null> {
     const categoria = await this.findOne(id);
 
     if (!categoria) {
       return null;
+    }
+
+    const mensagemBloqueio = this.getMensagemBloqueioRemocao(categoria);
+
+    if (mensagemBloqueio) {
+      throw new ConflictException(mensagemBloqueio);
     }
 
     return categoria.remove();

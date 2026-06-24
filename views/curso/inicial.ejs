@@ -1,3 +1,5 @@
+<% const buscaCursos = locals.buscaCursos || '' %>
+
 <div class="row page-titles mx-0">
     <div class="col-sm-6 p-md-0">
         <div class="welcome-text">
@@ -21,6 +23,31 @@
                 <a href="/cursos/criar" class="btn btn-primary mb-2">Adicionar Novo Curso</a>
             </div>
             <div class="card-body">
+                <form action="/cursos" method="get" class="mb-4">
+                    <div class="input-group">
+                        <input
+                            type="search"
+                            class="form-control"
+                            name="q"
+                            value="<%= buscaCursos %>"
+                            placeholder="Buscar por titulo, categoria ou status"
+                            aria-label="Buscar cursos"
+                        >
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary">Buscar</button>
+                            <% if (buscaCursos) { %>
+                                <a href="/cursos" class="btn btn-secondary">Limpar</a>
+                            <% } %>
+                        </div>
+                    </div>
+                </form>
+
+                <% if (buscaCursos) { %>
+                    <div class="alert alert-info">
+                        Resultado da busca por: <strong><%= buscaCursos %></strong>
+                    </div>
+                <% } %>
+
                 <div class="table-responsive">
                     <table class="table table-responsive-sm">
                         <thead>
@@ -37,7 +64,9 @@
                         <tbody>
                             <% if (!cursos.length) { %>
                                 <tr>
-                                    <td colspan="7" class="text-center">Nenhum curso cadastrado.</td>
+                                    <td colspan="7" class="text-center">
+                                        <%= buscaCursos ? 'Nenhum curso encontrado para a busca informada.' : 'Nenhum curso cadastrado.' %>
+                                    </td>
                                 </tr>
                             <% } %>
 

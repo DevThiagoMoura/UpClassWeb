@@ -5,13 +5,25 @@ import { UpdateCursoDto } from './dtos/update-curso.dto';
 
 @Injectable()
 export class CursoService {
-  async findAll(): Promise<Curso[]> {
-    return Curso.find({
-      relations: ['categoria'],
-      order: {
-        titulo: 'ASC',
-      },
-    });
+  async findAll(termoBusca?: string): Promise<Curso[]> {
+    const busca = termoBusca?.trim();
+    const query = Curso.createQueryBuilder('curso')
+      .leftJoinAndSelect('curso.categoria', 'categoria')
+      .orderBy('curso.titulo', 'ASC');
+
+    if (busca) {
+      query.where(
+        [
+          'LOWER(curso.titulo) LIKE :busca',
+          'LOWER(curso.descricao) LIKE :busca',
+          'LOWER(curso.status) LIKE :busca',
+          'LOWER(categoria.nome) LIKE :busca',
+        ].join(' OR '),
+        { busca: `%${busca.toLowerCase()}%` },
+      );
+    }
+
+    return query.getMany();
   }
 
   async findOne(id: number): Promise<Curso | null> {

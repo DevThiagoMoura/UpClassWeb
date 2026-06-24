@@ -1,0 +1,39 @@
+<div class="row page-titles mx-0">
+    <div class="col-sm-6 p-md-0">
+        <div class="welcome-text">
+            <h4>Acesso restrito</h4>
+            <p class="mb-0">&raquo; Seu perfil nao possui permissao para acessar esta area.</p>
+        </div>
+    </div>
+    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Inicial</a></li>
+            <li class="breadcrumb-item active"><a href="javascript:void(0)">Acesso restrito</a></li>
+        </ol>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 offset-lg-2">
+        <div class="card">
+            <div class="card-body">
+                <div class="alert alert-warning mb-4">
+                    Esta area e reservada para perfis administrativos do sistema.
+                </div>
+                <p>
+                    O cadastro feito pela tela inicial cria um usuario com perfil de aluno.
+                    Esse perfil pode acessar o sistema, mas nao pode gerenciar cursos,
+                    categorias ou usuarios.
+                </p>
+                <p class="mb-4">
+                    Para acessar esta funcionalidade, entre com um usuario administrador
+                    ou com um perfil autorizado pelo sistema.
+                </p>
+                <a href="/" class="btn btn-primary mr-2">Voltar ao inicio</a>
+                <form action="/logout" method="post" class="d-inline">
+                    <button type="submit" class="btn btn-secondary">Sair</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

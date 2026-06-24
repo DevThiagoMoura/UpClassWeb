@@ -31,7 +31,7 @@ export class AutenticacaoController {
 
     return {
       layout: false,
-      titulo: 'Login - Base Administrativa',
+      titulo: 'Login - UpClass',
       login: {
         email: '',
         next: caminho,
@@ -47,7 +47,7 @@ export class AutenticacaoController {
   @Post('login')
   @ValidationView('autenticacao/login', ({ request, errors }) => ({
     layout: false,
-    titulo: 'Login - Base Administrativa',
+    titulo: 'Login - UpClass',
     login: {
       email: request.body?.email ?? '',
       next: request.body?.next ?? '',
@@ -65,7 +65,7 @@ export class AutenticacaoController {
     if (!usuario) {
       response.status(HttpStatus.UNAUTHORIZED).render('autenticacao/login', {
         layout: false,
-        titulo: 'Login - Base Administrativa',
+        titulo: 'Login - UpClass',
         login: {
           email: dados.email,
           next: dados.next ?? '',
@@ -95,7 +95,7 @@ export class AutenticacaoController {
   cadastro(): object {
     return {
       layout: false,
-      titulo: 'Cadastro - Base Administrativa',
+      titulo: 'Cadastro - UpClass',
       cadastro: {
         nome: '',
         email: '',
@@ -108,7 +108,7 @@ export class AutenticacaoController {
   @Post('cadastro')
   @ValidationView('autenticacao/cadastro', ({ request, errors }) => ({
     layout: false,
-    titulo: 'Cadastro - Base Administrativa',
+    titulo: 'Cadastro - UpClass',
     cadastro: {
       nome: request.body?.nome ?? '',
       email: request.body?.email ?? '',

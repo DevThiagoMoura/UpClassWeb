@@ -6,6 +6,18 @@ export type AuthUser = {
   perfil: string;
 };
 
+export const normalizePerfil = (perfil?: string | null): string =>
+  (perfil || '').trim().toLowerCase();
+
+export const usuarioTemPerfil = (
+  usuario: AuthUser | null,
+  perfisPermitidos: string[],
+): boolean => {
+  const perfil = normalizePerfil(usuario?.perfil);
+
+  return perfisPermitidos.includes(perfil);
+};
+
 type AuthConfig = {
   cookieName: string;
   secret: string;

@@ -1,4 +1,6 @@
 <% const categoria = locals.categoria || {} %>
+<% const mensagemBloqueio = locals.mensagemBloqueio || '' %>
+<% const totalCursos = Array.isArray(categoria.cursos) ? categoria.cursos.length : 0 %>
 
 <div class="row page-titles mx-0">
     <div class="col-sm-6 p-md-0">
@@ -20,13 +22,22 @@
     <div class="col-lg-8 offset-lg-2">
         <div class="card border-danger">
             <div class="card-header bg-danger p-3">
-                <h4 class="card-title text-white mb-0">Exclusão de categoria</h4>
+                <h4 class="card-title text-white mb-0">Exclusao de categoria</h4>
             </div>
             <div class="card-body">
-                <div class="alert alert-warning">
-                    <b>Esta ação excluirá o registro de forma permanente.</b>
-                </div>
-                <p class="mb-4">Tem certeza que deseja excluir a categoria abaixo?</p>
+                <% if (mensagemBloqueio) { %>
+                    <div class="alert alert-danger">
+                        <b>Exclusao bloqueada.</b>
+                        <div><%= mensagemBloqueio %></div>
+                    </div>
+                    <p class="mb-4">Para excluir esta categoria, primeiro edite ou remova os cursos vinculados a ela.</p>
+                <% } else { %>
+                    <div class="alert alert-warning">
+                        <b>Esta acao excluira o registro de forma permanente.</b>
+                    </div>
+                    <p class="mb-4">Tem certeza que deseja excluir a categoria abaixo?</p>
+                <% } %>
+
                 <div class="table-responsive mb-4">
                     <table class="table table-bordered mb-0">
                         <tbody>
@@ -35,16 +46,26 @@
                                 <td><%= categoria.nome %></td>
                             </tr>
                             <tr>
-                                <th>Descrição</th>
+                                <th>Descricao</th>
                                 <td><%= categoria.descricao || '-' %></td>
+                            </tr>
+                            <tr>
+                                <th>Cursos vinculados</th>
+                                <td><%= totalCursos %></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-                <form action="/categorias/<%= categoria.id %>/excluir" method="post">
-                    <button type="submit" class="btn btn-danger mr-2">Confirmar Exclusão</button>
-                    <a href="/categorias" class="btn btn-secondary">Cancelar</a>
-                </form>
+
+                <% if (!mensagemBloqueio) { %>
+                    <form action="/categorias/<%= categoria.id %>/excluir" method="post">
+                        <button type="submit" class="btn btn-danger mr-2">Confirmar Exclusao</button>
+                        <a href="/categorias" class="btn btn-secondary">Cancelar</a>
+                    </form>
+                <% } else { %>
+                    <a href="/cursos" class="btn btn-primary mr-2">Ver Cursos</a>
+                    <a href="/categorias" class="btn btn-secondary">Voltar</a>
+                <% } %>
             </div>
         </div>
     </div>
